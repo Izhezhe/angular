@@ -1,60 +1,63 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1></h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <v-header :seller="seller"></v-header>
+    <div class="tab border-1px">
+      <div class="tab-item">
+        <router-link to="goods">商品</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="ratings">评价</router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="seller">商家</router-link>
+      </div>
+    </div>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
+  import header from '@/components/header/header.vue'
+
+  export default {
+    data () {
+      return {
+        apiUrl: '/api/seller',
+        ERR_OK: 0,
+        seller: {}
+      }
+    },
+    created () {
+      this.$http.get(this.apiUrl).then((res) => {
+        res = res.body
+        if (res.errno === this.ERR_OK) {
+          this.seller = res.data
+        }
+      })
+    },
+    components: {
+      'v-header': header
     }
   }
-}
 </script>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="stylus" rel="stylesheet/stylus">
+  @import "./common/stylus/mixin.styl"
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
+  #app
+    .tab
+      display: flex
+      width: 100%
+      height: 40px
+      line-height: 40px
+      border-1px(rgba(7, 17, 27, 0.1))
+      .tab-item
+        flex: 1
+        text-align: center
+        a
+          display: block
+          font-size: 14px
+          color: rgb(77, 85, 93)
+          &.router-link-active
+            color: rgb(240, 20, 20)
 </style>
