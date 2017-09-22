@@ -14,7 +14,7 @@
         <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
+            <li v-for="food in item.foods" class="food-item border-1px" @click="selectFood(food, $event)">
               <div class="icon">
                 <img :src="food.icon" width="57px" height="57px">
               </div>
@@ -28,7 +28,7 @@
                   <span class="now">￥{{food.price}}</span><span v-if="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food" @cartAdd="addCart"></cartcontrol>
+                  <cartcontrol :food="food" @cartAdd="_drop"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -37,13 +37,15 @@
       </ul> 
     </div>
     <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <food :food="selectedFood" ref="food" @cartAdd="_drop"></food>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
-  import shopcart from '@/components/shopcart/shopcart'
-  import cartcontrol from '@/components/cartcontrol/cartcontrol'
+  import shopcart from '@/components/shopcart/shopcart' // 购物车
+  import cartcontrol from '@/components/cartcontrol/cartcontrol' // 加减按钮
+  import food from '@/components/food/food' // 详情页
   export default {
     props: {
       seller: {
@@ -56,7 +58,8 @@
         ERR_OK: 0,
         goods: {},
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       }
     },
     created () {
@@ -105,7 +108,14 @@
         let el = foodList[index]
         this.foodsScroll.scrollToElement(el, 300)
       },
-      addCart (el) {
+      selectFood (food, event) {
+        if (!event._constructed) { // 将PC端派发的事件拦截
+          return
+        }
+        this.selectedFood = food
+        this.$refs.food.show()
+      },
+      _drop (el) {
         // 1、通过发送的事件名，将对象传送到这里
         // 2、通过ref将拿到的对象传送到shopcart的drop方法中
         this.$nextTick(() => {
@@ -139,7 +149,8 @@
     },
     components: {
       shopcart,
-      cartcontrol
+      cartcontrol,
+      food
     }
   }
 </script>
