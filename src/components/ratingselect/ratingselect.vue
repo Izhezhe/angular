@@ -88,7 +88,7 @@
         padding 8px 12px
         line-height 16px
         margin-right 8px
-        border-radius 2px
+        border-radius 1px
         font-size 12px
         color rgb(77, 85, 93)
         &.active
@@ -106,7 +106,6 @@
           margin-left 2px
     .switch
       padding 12px 18px
-      line-height 24px
       font-size 0
       border-bottom 1px solid rgba(7, 17, 27, .1)
       color rgb(147, 153, 149)
@@ -120,5 +119,6 @@
       .text
         display inline-block
         vertical-align top
+        line-height 24px
         font-size 12px
 </style>
