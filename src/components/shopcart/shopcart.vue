@@ -4,7 +4,7 @@
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount>0}">
-            <i class="icon-shopping_cart"></i>
+            <i class="iconfont icon-shopping_cart"></i>
           </div>
           <div class="num" v-show="totalCount>0">{{totalCount}}</div>
         </div>

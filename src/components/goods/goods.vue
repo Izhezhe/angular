@@ -16,7 +16,7 @@
           <ul>
             <li v-for="food in item.foods" class="food-item border-1px" @click="selectFood(food, $event)">
               <div class="icon">
-                <img :src="food.icon" width="57px" height="57px">
+                <img :src="food.icon" alt="" width="57px" height="57px">
               </div>
               <div class="content">
                 <h2 class="name">{{food.name}}</h2>
@@ -65,7 +65,7 @@
     created () {
       this.$http.get(this.apiUrl).then((res) => {
         res = res.body
-        if (res.errno === this.ERR_OK) {
+        if (res.code === this.ERR_OK) {
           this.goods = res.data
           this.$nextTick(() => {
             this._initScroll()

@@ -11,6 +11,7 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var axios = require('axios')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -24,7 +25,7 @@ var app = express()
 
 var appData = require('../data.json')
 var seller = appData.seller
-var goods = appData.goods
+// var goods = appData.goods
 var ratings = appData.ratings
 
 // 路由，本地数据
@@ -37,10 +38,21 @@ apiRouters.get('/seller', function (req, res) {
   })
 })
 
-apiRouters.get('/goods', function (req, res) {
+/*apiRouters.get('/goods', function (req, res) {
   res.json({
     errno: 0,
     data: goods
+  })
+})*/
+
+apiRouters.get('/goods', function (req, res) {
+  var url = 'https://www.zhzhao.top/buyer/product/list'
+  axios.get(url, {
+    params: req.data
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
   })
 })
 
